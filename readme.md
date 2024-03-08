@@ -3,6 +3,8 @@
 This was a simple project to transfer all of my local CDs to Spotify. It matches the Aritist and Album to the most likely Spotify candidate, then automatically follows the artists and likes the albums.
 
 ## Configuration
+First, you will need to set up a Spotify developer account at [developer.spotify.com](https://developer.spotify.com). Create a new app and indicate that you plan to use the Web API. Once the app is created, you will have access to a Client ID, Client Secret, and Redirect URI.
+
 Copy `.env.example` to `.env` and set the variables as needed.
 
 ## Scripts

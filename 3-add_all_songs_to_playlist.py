@@ -28,27 +28,6 @@ else:
 # Define some functions
 ##############################
 
-# Get all followed artists
-def get_all_followed_artists() -> List[Dict]:
-    last_id = None
-    CHUNK_SIZE = 50
-    existing_follows = []
-    while True:
-        resp = sp.current_user_followed_artists(limit=CHUNK_SIZE, after=last_id)
-        artists = ([{"id": item["id"], "name": item["name"]} for item in resp["artists"]["items"]])
-        print(f"Retrieved {len(artists)} artists. Sample: {', '.join([item['name'] for item in artists[0:5]])}")
-
-        existing_follows += artists
-
-        if len(resp["artists"]["items"]) < CHUNK_SIZE:
-            break
-
-        last_id = artists[-1]["id"]
-        
-        time.sleep(.5)
-
-    return existing_follows
-
 def get_all_saved_albums() -> List[Dict]:
     offset = 0
     CHUNK_SIZE = 50
@@ -73,32 +52,6 @@ def get_all_saved_albums() -> List[Dict]:
         time.sleep(.5)
 
     return existing_follows
-
-
-def get_all_albums_for_artists(artists: List[str]):
-    artist_albums = []
-    for i, artist_id in enumerate(artists):
-        print(f"Retrieving albums for artists {i} / {len(artists)}: {artist_id}...", end="")
-        
-        resp = sp.artist_albums(artist_id, album_type="album",limit=50)    
-
-        if len(resp["items"]) > 0:
-            albums = [{
-                    "artist_id": artist_id,
-                    "album_id": item["id"],
-                    "name": item["name"],
-                    "url": item["external_urls"]["spotify"]
-                } for item in resp["items"]]
-
-            print(f"{len(albums)} records. Samples: {', '.join([item['name'] for item in albums[0:3]])}")
-
-            artist_albums += albums
-        else:
-            print("None found.")
-
-        time.sleep(.5)
-
-    return pd.DataFrame(artist_albums)
 
 def chunker(seq, size):
     return (seq[pos:pos + size] for pos in range(0, len(seq), size))

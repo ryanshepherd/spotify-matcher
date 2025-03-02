@@ -4,3 +4,4 @@ __pycache__
 .cache*
 config.py
 .env
+.tidal_session.txt

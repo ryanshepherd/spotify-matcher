@@ -42,7 +42,7 @@ def get_all_followed_artists() -> List[Dict]:
             break
 
         last_id = artists[-1]["id"]
-        
+
         time.sleep(.5)
 
     return existing_follows
@@ -67,7 +67,7 @@ def get_all_saved_albums() -> List[Dict]:
             break
 
         offset += CHUNK_SIZE
-        
+
         time.sleep(.5)
 
     return existing_follows
@@ -77,8 +77,8 @@ def get_all_albums_for_artists(artists: List[str]):
     artist_albums = []
     for i, artist_id in enumerate(artists):
         print(f"Retrieving albums for artists {i} / {len(artists)}: {artist_id}...", end="")
-        
-        resp = sp.artist_albums(artist_id, album_type="album",limit=50)    
+
+        resp = sp.artist_albums(artist_id, album_type="album",limit=50)
 
         if len(resp["items"]) > 0:
             albums = [{
@@ -119,8 +119,8 @@ for i in range(0, len(artists)):
 
     # SPOTIFY QUERY: Search by name
     resp = sp.search(artist, limit=3, type="artist")
-    
-    matches = resp["artists"]["items"] 
+
+    matches = resp["artists"]["items"]
     if len(matches) > 0:
 
         # Default the artist_id to the first match
@@ -142,10 +142,10 @@ for i in range(0, len(artists)):
 ###############################
 
 # Save
-artists.to_csv("data/artists.csv", index=False)
+artists.to_csv("data/spotify_artist_matches.csv", index=False)
 
 #
-# Manually: Review artists.csv. Fix ID's where necessary.
+# Manually: Review spotify_artist_matches.csv. Fix ID's where necessary.
 #
 
 #%%
@@ -159,7 +159,7 @@ resp = sp.search("owen", limit=5, type="artist")
 ###############################
 
 # Reload Artists CSV
-artists = pd.read_csv("data/artists.csv")
+artists = pd.read_csv("data/spotify_artist_matches.csv")
 
 # SPOTIFY QUERY: Get already-followed artists
 already_followed = [item["id"] for item in get_all_followed_artists()]
@@ -183,7 +183,7 @@ for ids in chunker(new_follows, CHUNK_SIZE):
 
 # Reload albums
 albums = pd.read_csv("data/albums.csv")
-artists = pd.read_csv("data/artists.csv", usecols=["artist", "artist_id"]).set_index("artist")
+artists = pd.read_csv("data/spotify_artist_matches.csv", usecols=["artist", "artist_id"]).set_index("artist")
 
 #%%
 
@@ -193,11 +193,11 @@ album_lookup.head()
 
 #%%
 # Stash off this album lookup
-album_lookup.to_csv("data/album_lookup.csv", index=False)
+album_lookup.to_csv("data/spotify_album_matches.csv", index=False)
 
 #%%
 # Option: Reload
-#album_lookup = pd.read_csv("data/album_lookup.csv")
+#album_lookup = pd.read_csv("data/spotify_album_matches.csv")
 
 #%%
 
